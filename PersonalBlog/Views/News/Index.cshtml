@@ -1,0 +1,75 @@
+﻿@using Domain.Model
+@model News
+@{
+  var news = ViewData["News"] as List<News>;
+}
+@section head
+  {
+  <link rel="stylesheet" href="/css/paging.css" />
+    <style>
+      .bloglist{
+        width: 100%;
+      }
+      .wz .wz-content{
+        width: 97%;
+      }
+      .wz .wz-content a{
+        color: #555;
+      }
+      .wz .wz-content a.readmore {
+        background: #fff;
+        box-sizing: border-box;
+        border: 1px solid #888;        
+        transition: all .5s ease-in;
+      }
+      .wz .wz-content a.readmore:hover {
+        background-color: #000;
+        color: #fff;
+      }
+    </style>
+}
+<article class="container" style="background-color:#fff;">  
+  <h2 class="title_tj">
+    <p>最新<span>新闻</span></p>
+  </h2>
+  <div class="bloglist left">
+    <!--wz-->
+    @foreach (var item in news)
+    {
+      <div class="wz">  
+        <p class="dateview"><span>@item.ReleaseTime.ToString("yyyy/MM/dd")</span><span>作者：@item.Author</span><span>分类：[<a href="#">@item.Category</a>]</span></p>
+        <figure class="imgbox"><img src="@item.ImgUrl"></figure>
+        <div class="wz-content">
+          <h3><a asp-controller="News" asp-action="NewsDetail" asp-route-Id="@item.Id" target="_blank" class="line-transation line-transation-555" >@item.Title</a></h3>
+          <p style="letter-spacing: 1px;text-indent: 2em;">@item.Introduction</p>
+          <a asp-controller="News" asp-action="NewsDetail" asp-route-Id="@item.Id" target="_blank" class="readmore">阅读全文>></a>
+        </div>
+        <div class="clear"></div>
+      </div>
+    }
+    <section id="Paging">
+      @{
+        int currentPage = Convert.ToInt32(ViewData["CurrentPage"]);
+        List<int> pages = ViewData["Pages"] as List<int>;
+        foreach (var page in pages)
+        {
+          string p = page.ToString();
+          if (currentPage == page)
+          {
+            <a class="active disable" href="#"><span>@p</span></a>
+          }
+          else
+          {
+            <a asp-controller="News" asp-action="Page" asp-route-page="@p"><span>@p</span></a>
+          }
+        }
+
+      }
+    </section>
+    <!--end-->
+  </div>
+
+</article>
+<!--百度分享-->
+@*<script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "2", "bdMiniList": false, "bdPic": "", "bdStyle": "1", "bdSize": "32" }, "share": {}, "image": { "viewList": ["qzone", "tsina", "tqq", "renren", "weixin"], "viewText": "分享到：", "viewSize": "16" }, "selectShare": { "bdContainerClass": null, "bdSelectMiniList": ["qzone", "tsina", "tqq", "renren", "weixin"] } }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];</script>*@
+

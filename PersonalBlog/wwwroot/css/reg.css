@@ -1,0 +1,65 @@
+﻿  .reg-title {
+    margin-top: 100px;
+  } .reg-title h2 {
+      font-weight: normal;
+      padding-bottom: 10px;
+      border-bottom: solid 2px #f3f3f3;
+    }
+
+  .reg-content {
+    height: 500px;
+  }
+
+  .register {
+    padding-left: 20px;
+    font-size: 16px;
+  }
+
+  .form-lable {
+    flex: 1;
+    padding: 0 0 0 40px;
+  }
+
+  .form-input {
+    flex: 5;
+  }
+
+  form {
+    box-sizing: border-box;
+    border-right: 1px solid #ccc;
+  }
+
+  .form-input input {
+    border-radius: 4px;
+    width: 300px;
+    height: 22px;
+    padding: 0 5px;
+    outline: 0;
+    border: 1px solid #5f9ea0;
+  }
+
+  .form-group {
+    display: flex;
+    margin-top: 20px;
+  }
+
+  .error-message {
+    padding-left: 10px;
+    color: red;
+  }
+  footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .content-left {
+    float: left;
+    width: 70%;
+  }
+
+  .content-right {
+    float: right;
+    width: 30%;
+  }

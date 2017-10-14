@@ -1,0 +1,66 @@
+﻿<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>lentoo个人博客</title>
+  <meta name="keywords" content="个人博客,技术博客" />
+  <meta name="description" content="优雅、稳重、大气、低调。" />
+  <link href="/css/index.css" rel="stylesheet">
+  <script src="~/js/Ajax.js"></script>
+  <script>
+    window.onload = function () {
+      let btnLogin = document.querySelector('#btn-login');
+      if (btnLogin != null) {
+        btnLogin.addEventListener('click', function () {
+          let returnUrl = window.location.href;
+          window.location.href = '/Login/Index?returnUrl=' + returnUrl;
+        });
+      }
+    }
+    HTMLCollection.prototype.toArray = function () {
+      return [].slice.call(this);
+    };
+  </script>
+  <!--[if lt IE 9]>
+    <script src="/js/html5.js"></script>
+  <![endif]-->
+  @RenderSection("head", false);
+</head>
+<body>
+  <header>
+    <div id="logo"><img class="logo-name" src="/images/logo-name.gif" /><a href="/"></a></div>
+    <nav class="topnav" id="topnav">
+      <a asp-controller="Blogs" asp-action="Page"><span>首页</span><span class="en">Home</span></a>
+      <a asp-controller="News" asp-action="Page"><span>新闻</span><span class="en">News</span></a>
+      <!-- <a href="about.html"><span>关于我</span><span class="en">About</span></a> -->
+      <a asp-controller="About" asp-action="Index"><span>关于我</span><span class="en">About</span></a>
+
+      @*<a href="saylist.html"><span>个人日记</span><span class="en">Diary</span></a>*@
+      <a asp-controller="Blogs" asp-action="PublishedBlog"><span>发表博客</span><span class="en">Blog post</span></a>
+    </nav>
+    <div style="position:absolute;right:0;font-size:14px;">
+      @{ if (@User.Identity.IsAuthenticated)
+        {
+          <span>当前用户：</span>@User.Identity.Name
+          <span><a asp-action="SignOut" asp-controller="Login" style="text-decoration:underline;padding: 0 4px;color:#12c">退出</a></span>
+        }
+        else
+        {
+          <div>
+            <span><a href="javascript:void(0)" class="p3" id="btn-login" style="text-decoration:underline;padding: 0 4px;color:#12c">登陆</a></span>
+            <span><a href="/Login/Reg" style="text-decoration:underline;padding: 0 4px;color:#12c">注册</a></span>
+          </div>
+        }
+      }
+
+    </div>
+  </header>
+  @RenderBody()
+  <footer class="container">
+    <p><span>Design By:<a href="#" target="_blank">lentoo</a></span><span>网站地图</span><span><a href="/">网站统计</a></span></p>
+  </footer>
+  <script src="~/js/nav.js"></script>
+  <script type="text/javascript" color="0,0,255" opacity='0.7' zIndex="-2" count="150" src="/js/canvas-nest/canvas-nest.min.js"></script>
+</body>
+@RenderSection("footer", false);
+</html>

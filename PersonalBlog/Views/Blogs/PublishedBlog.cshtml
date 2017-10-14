@@ -1,0 +1,229 @@
+﻿
+@section head
+  {
+  <link href="/css/style.css" rel="stylesheet">
+  @*<link rel="stylesheet" href="~/css/syntaxhighlighter/styles/shCore.css" />*@
+  @*<script src="/js/Editor/wangEditor.js"></script>*@
+  @*<script src="~/js/Editor/wangEditor.min.js"></script>*@
+  <script src="/js/Editor/xss.js"></script>
+
+  @*<script src="https://cdn.ckeditor.com/4.6.1/standard-all/ckeditor.js"></script>*@
+  @*<script src="~/js/Editor/CKEditor/ckeditor.js"></script>*@
+  <script src="https://cdn.staticfile.org/ckeditor/4.6.2/ckeditor.js"></script>
+
+}
+
+<article class="blogs">
+  <h1 class="t_nav"><span>既然来了，那么就留下你的足迹吧！</span><a href="/" class="n1">网站首页</a></h1>
+  <div class="bloglist left" style="width:100%">
+    <div id="gustbook">
+      <form id="form" asp-controller="Blogs" method="post" asp-action="AddBlog">
+        <div class="blog-header">
+          <label for="title">标题：</label>
+          <input id="title" name="Title" type="text" value="" />
+        </div>
+        @*<div id="editor-box">
+          </div>*@
+        <textarea id="editor-box">
+
+        </textarea>
+        <input id="editor-content" name="Content" type="hidden" value="" />
+        <div class="category">
+          <div id="website_category" class="form-group">
+            <div id="toggle_category"><span><img id="toggle_category_img" src="/images/toggle_gray_down.gif" /></span><span>网站分类</span></div>
+          </div>
+          <div id="category_content" class="form-group" style="display: none">
+            <div><input type="checkbox" class="category_input" name="Category" value="ASP.NET/C#" />ASP.NET/C#</div>
+            <div><input type="checkbox" class="category_input" name="Category" value="ASP.NET/C#" />Java</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <section class="flex1-11">
+            <label for="keyWords">关键词：</label>
+            <input id="keyWords" style="width: 100%;" type="text" class="category_input" name="keyWords" placeholder="多个关键词用，隔开" />
+          </section>
+        </div>
+        <div class="form-group">
+          <button id="btn_submit" class="form-control btn btn-default">提交</button>
+          <button id="btn_save" class="form-control btn btn-default">存为草稿</button>
+          <button id="btn_cancel" class="form-control btn btn-default">取消</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+  <!--right-->
+
+</article>
+@section footer{
+  <script src="/js/nav.js"></script>
+  <!-- Baidu Button BEGIN -->
+  <script type="text/javascript">
+    //富文本编辑器配置 start
+    CKEDITOR.replace('editor-box', {
+      //GitHub地址：https://github.com/ckeditor
+      toolbar: [
+        { name: 'document', items: ['Source'] },
+        { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+        { name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt'] },
+        { name: 'forms', items: ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'] },
+        { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat'] },
+        { name: 'colors', items: ['TextColor', 'BGColor'] },
+        { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language'] },
+        { name: 'links', items: ['Link', 'Unlink', 'Anchor' ] },
+        { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },  
+        { name: 'insert', items: ['Image', 'CodeSnippet', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'] },        
+        { name: 'tools', items: ['Maximize', 'ShowBlocks'] },
+        
+        
+      ],
+      filebrowserImageUploadUrl: '/Blogs/UploadImageUrl', //配置图片上传
+      customConfig: '',
+      extraPlugins: 'codesnippet,image2,uploadimage',
+      removePlugins: 'image',
+      //mathJaxLib: 'https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML',
+      codeSnippet_theme: 'ir_black',
+      height: 450,
+      //contentsCss: ['https://cdn.ckeditor.com/4.6.1/standard-all/contents.css'],
+      contentsCss: ['https://cdn.staticfile.org/ckeditor/4.6.2/contents.css'],
+      format_tags: 'p;h1;h2;h3;pre',
+      removeDialogTabs: 'image:advanced;link:advanced;link:target',
+      stylesSet: [
+        /* Inline Styles */
+        { name: 'Marker', element: 'span', attributes: { 'class': 'marker' } },
+        { name: 'Cited Work', element: 'cite' },
+        { name: 'Inline Quotation', element: 'q' },
+        /* Object Styles */
+        {
+          name: 'Special Container',
+          element: 'div',
+          styles: {
+            padding: '5px 10px',
+            background: '#eee',
+            border: '1px solid #ccc'
+          }
+        },
+        {
+          name: 'Compact table',
+          element: 'table',
+          attributes: {
+            cellpadding: '5',
+            cellspacing: '0',
+            border: '1',
+            bordercolor: '#ccc'
+          },
+          styles: {
+            'border-collapse': 'collapse'
+          }
+        },
+        { name: 'Borderless Table', element: 'table', styles: { 'border-style': 'hidden', 'background-color': '#E6E6FA' } },
+        { name: 'Square Bulleted List', element: 'ul', styles: { 'list-style-type': 'square' } },
+        /* Widget Styles */
+        { name: 'Illustration', type: 'widget', widget: 'image', attributes: { 'class': 'image-illustration' } },
+        { name: 'Featured snippet', type: 'widget', widget: 'codeSnippet', attributes: { 'class': 'code-featured' } },
+        { name: 'Featured formula', type: 'widget', widget: 'mathjax', attributes: { 'class': 'math-featured' } }
+      ]
+    });
+    //var textarea = document.getElementById('editor-box');
+    //var editorBox = new wangEditor(textarea);
+    //editorBox.customConfig.uploadImgServer = '/Blogs/UploadImage'; // 上传图片到服务器
+    //editorBox.create();
+    //editorBox.txt.html(localStorage.getItem('editorContent'));
+    //富文本编辑器配置 end
+
+    //切换分类列表 start
+    (function () {
+      var websiteCategory = document.getElementById('website_category');
+      var categoryContent = document.getElementById('category_content');
+      var toggleCategory = document.getElementById('toggle_category_img');
+      var isDown = true;
+      websiteCategory.addEventListener('click', function () {
+        if (isDown) {
+          categoryContent.style.display = "block";
+          isDown = false;
+          toggleCategory.src = "/images/toggle_gray_up.gif";
+        } else {
+          isDown = true;
+          categoryContent.style.display = "none";
+          toggleCategory.src = "/images/toggle_gray_down.gif";
+        }
+      });
+    })();
+    //切换分类列表 end
+
+    //表单提交 start
+    (function () {
+      var form = document.getElementById('form');
+      var btnSubmit = document.getElementById('btn_submit');
+      var btnSave = document.getElementById('btn_save');
+      var btnCancel = document.getElementById('btn_cancel');
+      var hiddenBox = document.getElementById('editor-content');
+
+      btnSubmit.addEventListener('click', function (even) {
+        even.preventDefault();
+        localStorage.removeItem('editorContent');
+        //var editorContent = editorBox.txt.html();           //wangEditor 编辑器
+        let editorContent = CKEDITOR.instances["editor-box"].getData(); //CKeditor 编辑器
+        editorContent = filterXSS(editorContent);
+        hiddenBox.value = editorContent;
+        if (validateForm()) {
+          form.submit();
+        }
+      });
+      btnSave.addEventListener('click', function (even) {
+        even.preventDefault();
+        //var editorContent = editorBox.txt.html();
+        let editorContent = CKEDITOR.instances["editor-box"].getData(); //CKeditor 编辑器
+        localStorage.setItem('editorContent', editorContent);
+        alert('暂存成功');
+      });
+      btnCancel.addEventListener('click', function (even) {
+        window.location.href = "/Blogs/Index";
+        even.preventDefault();
+      });
+    })();
+
+    function validateForm() {
+      if (!validateTitle()) {
+        var title = document.getElementById('title');
+        title.addEventListener('blur', () => {
+          if (title.value !== '') {
+            title.style.borderColor = '';
+          }
+        });
+        title.focus();
+        title.style.borderColor = 'red';
+        title.style.outline = 'none';
+        title.placeholder = '请输入标题';
+        return false;
+      }
+      if (!validateCategory()) {
+        alert('分类没选择');
+        return false;
+      }
+      return true;
+    }
+
+    function validateCategory() {
+      var categorys = document.getElementsByClassName('category_input');
+      for (let i = 0; i < categorys.length; i++) {
+        if (categorys[i].checked) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    function validateTitle() {
+      let title = document.getElementById('title').value;
+      if (title === '') {
+        return false;
+      }
+      return true;
+    }
+  //表单提交 end
+  //document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" +
+  //  Math.ceil(new Date() / 3600000);
+  </script>
+
+}

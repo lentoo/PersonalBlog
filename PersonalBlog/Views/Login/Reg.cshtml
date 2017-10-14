@@ -1,0 +1,159 @@
+﻿
+
+@section head
+  {
+  <link href="/css/reg.css" rel="stylesheet" />
+  <script src="/js/Ajax.js"></script>
+}
+<article class="register">
+  <div class="reg-title"><h2>注册新用户</h2></div>
+  <div class="reg-content">
+    <div class="content-left">
+      <form id="form" method="post" asp-controller="Login" asp-action="RegisterUser">
+        <div class="form-group">
+          <div class="form-lable">
+            <label for="UserName">登陆账号</label>
+          </div>
+          <div class="form-input">
+            <input id="UserName" type="text" name="UserName" value="" placeholder="登陆用户名，不少于4个字符" />
+            <span id="UserNameError" class="error-message hidden">用户名已存在</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-lable">
+            <label for="NickName">显示名称</label>
+          </div>
+          <div class="form-input">
+            <input id="NickName" type="text" name="NickName" value="" placeholder="即昵称，不少于2个字符" />
+            <span id="NickNameError" class="error-message hidden">昵称不合法</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-lable">
+            <label for="Password" class="w4-2">密码</label>
+          </div>
+          <div class="form-input">
+            <input id="Password" type="password" name="Password" value="" placeholder="至少8位，必须包含字母、数字" />
+            <span id="PasswordError" class="error-message hidden">密码错误</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-lable">
+            <label for="ConfirmPwd">确认密码</label>
+          </div>
+          <div class="form-input">
+            <input id="ConfirmPwd" type="password" name="ConfirmPwd" value="" placeholder="请输入确认密码" />
+            <span id="ConfirmPwdError" class="error-message hidden">两次密码不一致</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <button id="btn-reg" class="btn btn-skyblue" style="position: relative;left: 25%; width: 80px;">注册</button>
+        </div>
+        <div class="form-group">
+          <p class="font12" style="margin: 0 auto;">*点击 “注册” 按钮，即表示您同意并愿意遵守 <a href="#">用户协议</a>。</p>
+        </div>
+      </form>
+    </div>
+    <div class="content-right">
+      <div style="margin-top: 20px; padding: 10px;">
+        <img style="position: relative; width: 100%; border-radius: 8px;" src="https://account.cnblogs.com/images/registersideimg.png?v=SuVn_GWSEJByGrNm06GT-sxx_RW9nUtfd625myn_CsE" />
+      </div>
+    </div>
+  </div>
+</article>
+
+@section footer
+  {
+  <script>
+
+    var userName = document.querySelector('#UserName');
+    var userNameError = document.querySelector('#UserNameError');
+    var nickName = document.querySelector('#NickName');
+    var nickNameError = document.querySelector('#NickNameError');
+    var password = document.querySelector('#Password');
+    var passwordError = document.querySelector('#PasswordError');
+    var confirmPwd = document.querySelector('#ConfirmPwd');
+    var confirmPwdError = document.querySelector('#ConfirmPwdError');
+    userName.addEventListener('keyup', function () {
+      validateName();
+    });
+    nickName.addEventListener('keyup', function () {
+      validateNickName();
+    });
+    password.addEventListener('keyup', function () {
+      validatePwd();
+    });
+    confirmPwd.addEventListener('keyup', function () {
+      validateConfirmPwd();
+    });
+
+    var btnReg = document.querySelector('#btn-reg');
+    btnReg.addEventListener('click', function (even) {
+      even.preventDefault();
+      if (validateNickName() && validatePwd() && validateConfirmPwd()) {
+        var form = document.querySelector('#form');
+        form.submit();
+      }
+    });
+
+    function validate(str, pattern) {
+      return pattern.test(str);
+    }
+    function validateName() {
+      var pattern = /^[a-zA-Z0-9_-]{4,16}$/;
+      if (validate(userName.value, pattern)) {
+        let url = '/Login/CheckUserNameIsRegister?userName=' + userName.value;
+        Ajax.get(url, function (data) {
+          if (data === 'no') {
+            userNameError.className = 'error-message';
+            userNameError.innerText = '用户名已被注册';
+            return false;
+          } else {
+            console.log('name');
+            userNameError.className = 'error-message hidden';
+            return true;
+          }
+        });
+      } else {
+        userNameError.className = 'error-message';
+        userNameError.innerText = '输入的用户名格式不正确';
+        return false;
+      }
+    }
+    function validateNickName() {
+      var pattern = /^[A-Za-z0-9_\u4e00-\u9fa5]{2,10}$/;
+      if (validate(nickName.value, pattern)) {
+        nickNameError.className = 'error-message hidden';
+        console.log('nickname');
+        return true;
+      } else {
+        nickNameError.className = 'error-message';
+        nickNameError.innerText = '输入的昵称格式不正确';
+        return false;
+      }
+    }
+    function validatePwd() {
+      var pattern = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,21}$/;
+      if (validate(password.value, pattern)) {
+        passwordError.className = 'error-message hidden';
+        return true;
+      } else {
+        console.log('pwd');
+        passwordError.className = 'error-message';
+        passwordError.innerText = '输入的密码格式不正确';
+        return false;
+      }
+    }
+    function validateConfirmPwd() {
+      if (confirmPwd.value === password.value) {
+        console.log('confirm');
+        confirmPwdError.className = 'error-message hidden';
+        return true;
+      } else {
+        confirmPwdError.className = 'error-message';
+        confirmPwdError.innerText = '确认密码错误';
+        return false;
+      }
+    }
+  </script>
+}

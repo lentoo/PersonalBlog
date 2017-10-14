@@ -1,0 +1,390 @@
+﻿
+@section Head{
+  <link href="/css/new.css" rel="stylesheet">
+  <link rel="stylesheet" href="~/css/blog.css" />
+  <link href="~/css/highlight/xcode.css" rel="stylesheet" />
+  <script src="~/js/highlight/highlight.min.js"></script>
+  <script src="~/js/Ajax.js"></script>
+}
+@using Domain.Model
+@using Domain.ViewModel
+@model Blog
+@{
+  var blog = ViewData["Blog"] as Blog;
+  var comments = ViewData["Comments"] as List<CommentViewModel>;
+  int currentLayer = 0;
+}
+<article class="container blogs">
+  <h1 class="t_nav"><span>您当前的位置：<a asp-controller="Blogs" asp-action="Page">首页</a>&nbsp;&gt;&nbsp;<a href="#">博客详情</a></span></h1>
+  <div class="index_about" id="blog" data-blog-id="@blog.Id">
+    <h2 class="c_titile">@blog?.Title</h2>
+    <p class="box_c"><span class="d_time">发布时间：@blog?.PublishedTime</span><span>编辑：@blog.Author</span></p>
+    <ul class="infos">
+      @Html.Raw(blog.Content)
+    </ul>
+    <div class="keybq">
+      <p><span>关键字词</span>：@blog.Keywords</p>
+    </div>
+    <div class="ad"> </div>
+    <div class="nextinfo">
+      @*<p>上一篇：<a class="line-transation line-transation-lightblue" href="#">程序员应该如何高效的工作学习</a></p>
+      <p>下一篇：<a class="line-transation line-transation-lightblue" href="#">柴米油盐的生活才是真实</a></p>*@
+      @{
+        var nextBlog = ViewData["NextBlog"] as Blog;
+        var upBlog = ViewData["UpBlog"] as Blog;
+        if (nextBlog != null)
+        {
+          <p>
+            下一篇：<a class="line-transation line-transation-lightblue" asp-controller="Blogs" asp-action="BlogDetail" asp-route-id="@nextBlog.Id">@nextBlog.Title</a>           
+          </p>
+        }
+        if (upBlog != null)
+        {
+          <p>上一篇：<a class="line-transation line-transation-lightblue" asp-controller="Blogs" asp-action="BlogDetail" asp-route-id="@upBlog.Id">@upBlog.Title</a></p>
+        }
+      }
+    </div>
+    @*评论信息区*@
+    <section id="comment-information">
+      @{
+        int i = 0;
+        foreach (var comment in comments)
+        {
+          <div class="comment-info" id="@comment.Id">
+            <div class="clearfix">
+              <div class="comment-left">
+                <img class="title-img" src="~/images/headportrait.jpg" />
+              </div>
+              <div class="comment-right">
+                <p class="nick">@comment.NickName</p>
+                <p class="meta"><span>#@(currentLayer = i + 1)楼</span> <span>@comment.CommentTime</span></p>
+              </div>
+            </div>
+            <div class="comment-content">
+              @comment.Content
+            </div>
+            <div class="tool-group">
+              <div class="like-icon">
+                <a>
+                  <i class="icon-zan"></i>
+                  <span class="btn_like" data-commentId="@comment.Id">@comment.Like 人点赞</span>
+                </a>
+              </div>
+              <div class="like-icon btn-reply" data-commentId="@comment.Id">
+                <a href="javascript:void(0);">
+                  <i class="icon-hh"></i><span>回复</span>
+                </a>
+              </div>
+            </div>
+            <div class="sub-comments clearfix">
+              @{
+                if (comment.SubComments != null)
+                {
+                  foreach (var subComment in comment.SubComments)
+                  {
+
+                    <div class="clearfix sub-comments-info" data-comment-id="@comment.Id" data-sub-comment-id="@subComment.Id">
+                      <img class="semicircle-img" src="/images/headportrait.jpg" />
+                      <div class="sub-comments-content"><a href="/Users/1234" id="@subComment.UserId">@subComment.NickName</a>：<span>@subComment.Content</span></div>
+                      <div style="color: #808080">
+                        <span>@subComment.CommentTime</span>
+                        <i class="icon-hh"></i>
+                        <span style="cursor:pointer" class="sub-comments-reply" data-user-id="@subComment.UserId">回复</span>
+                      </div>
+                    </div>
+                  }
+                }
+              }
+            </div>
+            <div class="reply clearfix" id="comment-input-@comment.Id">
+
+            </div>
+          </div>
+                  i++;
+                }
+      }
+
+    </section>
+    @*评论信息结束*@
+
+    @*评论区域*@
+    <section id="common-area">
+
+      @{if (User.Identity.IsAuthenticated)
+        {
+          Users user = ViewData["Users"] as Users;
+          <section class="title">
+            <img class="common-icon" src="~/images/icon_addcomment.gif" />
+            <span>评论</span>
+          </section>
+          <section class="common-main">
+            @*<p>评论内容：</p>*@
+            <div class="common-content">
+              <div>
+                <img class="semicircle-img" src="/images/headportrait.jpg" />
+              </div>
+              <div class="content-text">
+                <textarea id="common-info" value="" placeholder="写下你的评论..."></textarea>
+                <span id="duration-box" style="color:red;display:none;">本次提交服务端执行了<span id="duration">111</span>ms</span>
+                @*<div id="common-info" class="input" contenteditable="true" placeholder="写下你的评论..."></div>*@
+                <span class="arrline">◆</span>
+                <span class="arrclr">◆</span>
+              </div>
+              <div style="margin-left: 40px;text-align: center;">
+                <button id="btn_post" class="btn btn-default">提交</button>
+              </div>
+            </div>
+          </section>
+        }
+        else
+        {
+          <div class="sign-container">
+            <div class="sign-box">
+              <a id="btn-go-login" class="btn btn-default">登陆</a><span>后发表评论</span>
+            </div>
+          </div>
+        }
+      }
+    </section>
+    @*评论区域结束*@    
+  </div>
+
+</article>
+@section footer {
+
+  <script type="text/javascript">
+    HTMLCollection.prototype.toArray = function () {
+      return [].slice.call(this);
+    };
+    let blog = document.getElementById('blog');
+    let blogId = blog.getAttribute('data-blog-id');
+    (function () {
+      let pres = document.querySelectorAll('.index_about pre');      
+      for (let item of pres) {
+        hljs.highlightBlock(item);
+      }
+    })();
+
+    var btnPostFunc = function () {
+      let btnGoLogin = document.querySelector('#btn-go-login');
+      if (btnGoLogin != null) {
+        btnGoLogin.addEventListener('click', function () {
+          let returnUrl = window.location.href;
+          window.location.href = '/Login/Index?returnUrl=' + returnUrl;
+        });
+      };
+      //发表评论
+      let btnPost = document.querySelector('#btn_post');
+      if (btnPost == null) return;
+      let commonInfo = document.querySelector('#common-info');
+      btnPost.addEventListener('click', function () {
+        let content = commonInfo.value;
+        Ajax.post('/Blogs/PostComment', 'blogId=' + blogId + '&content=' + content,
+          function (data) {
+            let json = JSON.parse(data);
+            if (json.resultCode == 0) {
+              //发表成功
+              let comment = json.comment;
+              let time = new Date().getTime();
+              let duration = json.duration.toFixed(2);
+              let html = `<div class="comment-info" id="${time}">
+                            <div class="clearfix">
+                              <div class="comment-left">
+                                <img class="title-img" src="/images/headportrait.jpg" />
+                              </div>
+                              <div class="comment-right">
+                                <p class="nick">${comment.nickName}</p>
+                                <p class="meta"><span>#@(++currentLayer)楼</span> <span>${comment.commentTime}</span></p>
+                              </div>
+                            </div>
+                            <div class="comment-content">
+                              ${comment.content}
+                            </div>
+                            <div class="tool-group">
+                              <div class="like-icon">
+                                <a href="javascript:;">
+                                  <i class="icon-zan"></i><span>${comment.like} 人点赞</span>
+                                </a>
+                              </div>
+                              <div class="like-icon btn-reply" data-commentId="${comment.id}">
+                                <a href="#">
+                                  <i class="icon-hh"></i><span>回复</span>
+                                </a>
+                              </div>
+                            </div>
+                            <div class="sub-comment">
+                            </div>
+                          </div>`;
+              commonInfo.value = '';
+              let durationBox = document.querySelector('#duration-box');
+              let durationContent = document.querySelector('#duration');
+              durationBox.style.display = 'inline-block';
+              durationContent.innerText = duration;
+              var comments = document.getElementById('comment-information');
+              comments.innerHTML += html;
+              btnPostFunc();
+            }
+            else {
+              alert(json.message);
+            }
+          });
+      });
+    };
+    btnPostFunc();
+    //点赞
+    (function () {
+      let btnLikes = document.getElementsByClassName('btn_like').toArray();
+      btnLikes.forEach((item, index) => {
+        item.addEventListener('click', function () {
+          let self = this;
+          let commentId = item.getAttribute('data-commentId');
+          Ajax.get('/Like/Like?commentId=' + commentId,
+            function (data) {
+              let json = JSON.parse(data);
+              if (json.resultCode == 0) {
+                var childs = self.parentNode.children;
+                for (var i = 0; i < childs.length; i++) {
+                  let child = childs[i];
+                  if (child.className == 'icon-zan') {
+                    child.className = 'icon-zan-red';
+                  }
+                }
+                let likeNum = parseInt(item.innerHTML);
+                item.innerHTML = likeNum + 1 + '人点赞';
+              } else {
+                item.innerHTML = '你已经点过赞了';
+                self.removeEventListener('click', function () { });
+              }
+            });
+        });
+      });
+    })();
+
+    //第一级回复功能
+    (function () {
+      let btnReplys = document.getElementsByClassName('btn-reply').toArray();
+      btnReplys.forEach((item, index) => {
+        item.addEventListener('click', function () {
+          if (!Authenticated()) return;
+          let commentId = item.getAttribute('data-commentId');
+          let id = 'comment-input-' + commentId;
+          if (!AddCommentTool(commentId, id)) {
+            return;
+          }
+          let submitComments = document.getElementById('submit-'+commentId);
+          let contentId = 'reply-content-' + commentId;
+          submitComments.addEventListener('click', function () {
+            let replyContentEle = document.getElementById(contentId);
+            let replyContent = document.getElementById(contentId).innerText;
+            let data = 'blogId=' + blogId+'&commentId=' + commentId + "&content=" + replyContent;
+            Ajax.post('/Blogs/Comment', data, function (data) {
+              let json = JSON.parse(data);
+              if (json.resultCode == 0) {
+                replyContentEle.innerText = '';
+                let commentHtml = `<div class="clearfix sub-comments-info">
+                                      <img class="semicircle-img" src="/images/headportrait.jpg"/>
+                                      <div class="sub-comments-content"><a href="/Users/1234">${json.comment.nickName}</a>：<span>${json.comment.content}</span></div>
+                                      <div><span>${json.comment.commentTime}<span><i class="icon-hh"></i><span style="cursor:pointer">回复</span></div>
+                                    </div>`;
+                let subComents = replyContentEle.parentNode.parentNode.parentNode;
+                let reply = replyContentEle.parentNode.parentNode;
+                subComents.removeChild(reply);
+                subComents.innerHTML += commentHtml;
+              } else if (json.resultCode == 2) {
+                window.location = '/Login/Index?returnUrl=' + json.returnUrl;
+              } else {
+                alert(json.message);
+              }
+            });
+          });
+        });
+      });
+    })();
+
+    //子回复按钮回复功能
+    var subCommentFunc = function () {
+      let subCommentsReply = document.getElementsByClassName('sub-comments-reply');
+      subCommentsReply.toArray().forEach((item, index) => {
+        item.addEventListener('click', function (even) {
+          if (!Authenticated()) return;
+          let subCommentInfo = item.parentNode.parentNode; //获取所在的评论信息元素标签
+          let commentId = subCommentInfo.getAttribute('data-comment-id');   //获取当前评论ID
+          //let subCommentId = subCommentInfo.getAttribute('data-sub-comment-id');  //获取子评论ID
+          let id = 'comment-input-' + commentId;
+          //获取用户昵称
+          let userId = item.getAttribute('data-user-id');
+          let user = document.getElementById(userId);
+          let userNickName = user.innerText;
+          if (!AddCommentTool(commentId, id, userNickName)) { //显示/隐藏评论工具栏
+            return;
+          }
+          let submitId = 'submit-' + commentId;     //提交按钮ID
+          let submitBtn = document.getElementById(submitId); //获取提交按钮
+          submitBtn.addEventListener('click', function () {
+            let contentId = 'reply-content-' + commentId;
+            let replyContentEle = document.getElementById(contentId);
+            let replyContent = document.getElementById(contentId).innerText; //获取输入的内容
+            let data = 'blogId=' + blogId + '&commentId=' + commentId + "&content=" + replyContent;
+            Ajax.post('/Blogs/Comment', data, function (data) {
+              let json = JSON.parse(data);
+              if (json.resultCode == 0) {
+                replyContentEle.innerText = '';
+                let subCommentHtml = `<div class="clearfix sub-comments-info" data-comment-id="${commentId}" data-sub-comment-id="${json.comment.id}">
+                                        <img class="semicircle-img" src="/images/headportrait.jpg" />
+                                        <div class="sub-comments-content"><a href="/Users/1234" id="${json.comment.userId}">${json.comment.nickName}</a>：<span>${json.comment.content}</span></div>
+                                        <div style="color: #808080">
+                                          <span>${json.comment.commentTime}</span>
+                                          <i class="icon-hh"></i>
+                                          <span style="cursor:pointer" class="sub-comments-reply" data-user-id="${json.comment.userId}">回复</span>
+                                        </div>
+                                      </div>`;
+                subCommentInfo.parentNode.innerHTML += subCommentHtml;
+                AddCommentTool(commentId, id);
+                subCommentFunc();
+              } else if (json.resultCode == 2) {
+                window.location ='/Login/Index?returnUrl='+ json.returnUrl;
+              } else {
+                alert(json.message);
+              }
+            });
+          });
+        });
+      });
+    };
+    subCommentFunc();
+    //添加回复工具
+    function AddCommentTool(commentId, id, user) {
+
+      let replyInputBox = document.getElementById('input-' + id);
+      let commentInfo = document.getElementById(commentId);
+      if (replyInputBox != null) { //已经点过回复
+        let reply = commentInfo.getElementsByClassName('reply')[0];
+        reply.innerHTML = '';
+        return false;
+      };
+      let html = `<div id="input-${id}" class="clearfix" style="padding: 10px;padding-left: 0">
+                    <img class="semicircle-img" src="/images/headportrait.jpg" />
+                     <div class="reply-content input" id="reply-content-${commentId}" placeholder="请输入评论内容..." contenteditable="true">`
+       user != null ? html += `<a href="#">@@${user}</a>：` : html;
+      //html += `@@${user}：`;
+      html+=`         </div>
+                    </div>
+                    <div class="clearfix" style="text-align:center">
+                      <button class="btn btn-default">取消</button>
+                      <button class="btn btn-skyblue submit-comments" id="submit-${commentId}">评论</button>
+                  </div>`;
+      let reply = document.getElementById(id).innerHTML += html;
+      return true;
+    }
+    //校验是否登录状态
+    function Authenticated() {
+      if ('@User.Identity.IsAuthenticated' == 'False') {
+          let currentHref = window.location;
+          window.location = '/Login/Index?returnUrl=' + currentHref;
+          return false;
+      }
+      return true;
+    }
+  </script>
+}
+

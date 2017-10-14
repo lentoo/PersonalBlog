@@ -1,0 +1,71 @@
+﻿
+@section Head{
+  <link href="/css/new.css" rel="stylesheet">
+  <style>
+    .index_about {
+      width: 84%;
+    }
+  </style>
+}
+@using Domain.Model
+@model News
+@{
+  var news = ViewData["News"] as News;
+}
+<article class="container blogs">
+  <h1 class="t_nav"><span>您当前的位置：<a href="#">新闻</a>&nbsp;&gt;&nbsp;<a href="#">新闻详情</a></span></h1>
+  <div class="index_about">
+    <h2 class="c_titile">@news.Title</h2>
+    <p class="box_c"><span class="d_time">发布时间：@news?.ReleaseTime</span><span>编辑：@news.Author</span></p>
+    <ul class="infos">
+      @Html.Raw(news.Content)
+    </ul>
+    <div class="ad"> </div>
+    <div class="nextinfo">
+      <p>上一篇：<a href="#">程序员应该如何高效的工作学习</a></p>
+      <p>下一篇：<a href="#">柴米油盐的生活才是真实</a></p>
+    </div>
+    <div class="otherlink">
+      <h2>相关文章</h2>
+      <ul>
+        <li><a href="#" title="相遇就是缘分">相遇就是缘分</a></li>
+        <li><a href="#" title="相遇就是缘分">相遇就是缘分</a></li>
+        <li><a href="#" title="相遇就是缘分">相遇就是缘分</a></li>
+        <li><a href="#" title="世上最美好的爱情">世上最美好的爱情</a></li>
+        <li><a href="#" title="爱情没有永远，地老天荒也走不完">爱情没有永远，地老天荒也走不完</a></li>
+        <li><a href="#" title="爱情的背叛者">爱情的背叛者</a></li>
+      </ul>
+    </div>
+  </div>
+  <aside class="right">
+    <!-- Baidu Button BEGIN -->
+    <div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare"><a class="bds_tsina"></a><a class="bds_qzone"></a><a class="bds_tqq"></a><a class="bds_renren"></a><span class="bds_more"></span><a class="shareCount"></a></div>
+    <script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=6574585"></script>
+    <script type="text/javascript" id="bdshell_js"></script>
+    <!-- Baidu Button END -->
+    <div class="blank"></div>
+    <div class="news">
+      <h3>
+        <p>栏目<span>最新</span></p>
+      </h3>
+      <ul class="rank">
+        <li><a href="/">一个网站的开发流程</a></li>
+        <li><a href="/">一个网站的开发流程</a></li>
+        <li><a href="/">一个网站的开发流程</a></li>
+        <li><a href="/">做网站到底需要什么?</a></li>
+        <li><a href="/">一个网站的开发流程</a></li>
+        <li><a href="/">一个网站的开发流程</a></li>
+      </ul>
+      <h3 class="ph">
+        <p>点击<span>排行</span></p>
+      </h3>
+      <ul class="paih">
+        <li><a href="/">一个网站的开发流程</a></li>
+        <li><a href="/">一个网站的开发流程</a></li>
+        <li><a href="/">一个网站的开发流程</a></li>
+        <li><a href="/">做网站到底需要什么?</a></li>
+        <li><a href="/">一个网站的开发流程</a></li>
+      </ul>
+    </div>
+  </aside>
+</article>

@@ -1,0 +1,169 @@
+﻿@using Domain.ViewModel
+@using Domain.Model
+@section head {
+  <link rel="stylesheet" href="/css/paging.css" />
+  
+  <style>
+    .bloglist {
+      font-family: 'Microsoft YaHei';
+      color: #333;
+      background-color: #fff;
+    }
+    .search .search-box {
+      box-sizing: border-box;
+      line-height: 27px;
+      float: left;
+      border: 1px solid #F3C8A6;
+      border-radius: 5px;
+      min-height: 15px;
+      font-size: 16px;
+      padding: 5px 10px;
+      display: inherit;
+      margin-bottom: 10px;
+      width: 98%;
+    }
+    .yd-num {
+      color: #555;
+    }
+    .paih li{
+      position: relative;
+      padding-left: 26px;
+    }
+    .paih i {
+      position: absolute;
+      top: 5px;
+      left: -1px;
+      width: 20px;
+      height: 20px;
+      margin: 0 4px;
+      font-style: normal;
+      text-align: center;
+      line-height: 20px;
+      background-color: #333;
+      border-radius: 5px;
+      color: #fff;
+    }
+    .paih i.hottest {
+      background-color: #37ccca;
+    }
+  </style>
+}
+@{
+  BlogView[] blogs = ViewData["Blogs"] as BlogView[];
+}
+<!--end header-->
+<div class="banner">
+  <section class="box">
+    <div class="texts">
+      <p class="p1">纪念我们:</p>
+      <p class="p2">终将逝去的青春</p>
+      <p class="p3">By:少年</p>
+    </div>
+  </section>
+</div>
+<!--end banner-->
+<article class="container">
+  <h2 class="title_tj">
+    <p>博客<span>列表</span></p>
+  </h2>
+  <div class="home bloglist left">
+    <!--wz-->
+    @foreach (var blog in blogs)
+      {
+      <div class="wz">
+        <p class="dateview"><span>@blog.PublishedTime.ToString("yyyy/MM/dd")</span><span>作者：@blog.Author</span><span>分类：[<a href="#">@blog.Category</a>]</span>
+          <a asp-controller="Blogs" asp-action="BlogDetail" asp-route-Id="@blog.Id"><span>阅读(<strong class="yd-num">@blog.VisitsNumber</strong>)</span></a>
+          <a asp-controller="Blogs" asp-action="BlogDetail" asp-route-Id="@blog.Id"><span>评论(<strong class="yd-num">@blog.CommentCount</strong>)</span></a>
+        </p>
+        <figure><img src="@blog.ImgUrl"></figure>
+        <div class="wz-content">
+          <h3><a class="line-transation" title="@blog.Title" asp-controller="Blogs" asp-action="BlogDetail" asp-route-Id="@blog.Id">@blog.Title</a></h3>
+          <p style="letter-spacing: 1px;text-indent: 2em;">@blog.Description</p>
+          <a asp-controller="Blogs" asp-action="BlogDetail" asp-route-Id="@blog.Id" class="readmore">阅读全文>></a>
+        </div>
+        <div class="clear"></div>
+      </div>
+    }
+    <!--end-->
+    <!--分页 start-->
+    <section id="Paging">
+      @{
+        List<int> pages = ViewData["Pages"] as List<int>;
+        int currentPage = Convert.ToInt32(ViewData["CurrentPage"]);
+        foreach (int page in pages)
+        {
+          string p = page.ToString();
+          if (currentPage == page)
+          {
+            <a class="active disable" href="#">
+              <span>@p</span>
+            </a>
+          }
+          else
+          {
+            <a asp-controller="News" asp-action="Page" asp-route-pageIndex="@p"><span>@p</span></a>
+          }
+        }
+      }
+    </section>
+    <!--分页 end-->
+  </div>
+  <!--right-->
+  <aside class="right">
+    <div class="search clearfix">
+      <form action="/Blogs/Search">
+        <input id="search" class="search-box" name="s" placeholder="请输入关键字进行搜索" contenteditable="true" />
+      </form>
+    </div>    
+    <div class="news">
+      <h3 class="ph">
+        <p>阅读<span>排行</span></p>
+      </h3>
+      <ul class="paih" id="hot-blogs">
+        @*<li><a href="/" title="如何建立个人博客" target="_blank">如何建立个人博客</a></li>
+        <li><a href="/" title="html5标签" target="_blank">html5标签</a></li>
+        <li><a href="/" title="一个网站的开发流程" target="_blank">一个网站的开发流程</a></li>
+        <li><a href="/" title="做网站到底需要什么?" target="_blank">做网站到底需要什么?</a></li>
+        <li><a href="/" title="企业做网站具体流程步骤" target="_blank">企业做网站具体流程步骤</a></li>*@
+      </ul>
+      <h3>
+        <p>用户<span>关注</span></p>
+      </h3>
+      @*<ul class="rank">
+        <li><a href="/" title="如何建立个人博客" target="_blank">如何建立个人博客</a></li>
+        <li><a href="/" title="一个网站的开发流程" target="_blank">一个网站的开发流程</a></li>
+        <li><a href="/" title="关键词排名的三个时期" target="_blank">关键词排名的三个时期</a></li>
+        <li><a href="/" title="做网站到底需要什么?" target="_blank">做网站到底需要什么?</a></li>
+        <li><a href="/" title="关于响应式布局" target="_blank">关于响应式布局</a></li>
+        <li><a href="/" title="html5标签" target="_blank">html5标签</a></li>
+      </ul>*@
+      <h3 class="links">
+        <p>友情<span>链接</span></p>
+      </h3>
+      <ul class="website">
+        <li><a href="#">个人博客</a></li>
+        <li><a href="wwww.duanliang920.com">段亮博客</a></li>
+      </ul>
+    </div>
+  </aside>
+</article>
+@section footer{ 
+  <script>
+    (function () { 
+      Ajax.get('/Blogs/ReadRankings', function (data) {
+        let json = JSON.parse(data);
+        console.log(json);
+        var hot_ul = document.getElementById('hot-blogs');        
+        let innerHtml = '';
+        if (json.length > 0) {
+          innerHtml = `<li><i class="hottest">${1}</i><a href="/Blogs/BlogDetail/${json[0].id}" title="${json[0].title}" target="_blank">${json[0].title}</a></li>`;
+        }
+        for (let i = 1; i < json.length; i++) {
+          innerHtml += `<li><i>${i + 1}</i><a href="/Blogs/BlogDetail/${json[i].id}" title="${json[i].title}" target="_blank">${json[i].title}</a></li>`
+        }
+        hot_ul.innerHTML = innerHtml;
+      })
+    })();
+    
+  </script>
+}

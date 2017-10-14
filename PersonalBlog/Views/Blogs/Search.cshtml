@@ -1,0 +1,91 @@
+﻿@using Domain.Model
+@using Domain.ViewModel
+@section head {
+  <style>
+    body {
+      color: #848484;
+    }
+
+    .blog em {
+      font-style: normal;
+      color: #dd2929;
+    }
+  </style>
+  <link href="~/css/search.css" rel="stylesheet" />
+  <link href="~/css/paging.css" rel="stylesheet" />
+}
+@{
+  List<BlogView> blogs = ViewData["Blogs"] as List<BlogView>;
+  string keyword = ViewData["CurrentKeyWord"] as string;
+  List<int> pages = ViewData["pages"] as List<int>;
+}
+<section class="container">
+  <section class="search-box">
+    <form action="/Blogs/Search">
+      <div class="form-group">
+        <div class="search-left">
+          <img src="~/images/search-logo.gif" />
+        </div>
+        <div class="search-right">
+          <input class="search-content form-control" placeholder="输入关键字搜索" name="s" type="text" value="@keyword" />
+          <button class="btn">找一下</button>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </form>
+  </section>
+  <section class="blog-list">
+    @{
+      foreach (var blog in blogs)
+      {
+        <div class="blog">
+          <div class="blog-left">
+            <figure><img src="@blog.ImgUrl"></figure>
+          </div>
+          <div class="blog-right">
+            <div class="blog-header">
+              <h3 class="blog-title"><a target="_blank" asp-controller="Blogs" asp-action="BlogDetail" asp-route-Id="@blog.Id">@Html.Raw(blog.Title)</a></h3>
+            </div>
+            <div class="blog-content">
+              <p>
+                @Html.Raw(blog.Description)
+              </p>
+            </div>
+          </div>
+          <div class="blog-footer">
+            <span>
+              <span><a href="#">@blog.Author</a></span>
+              <span>@blog.PublishedTime</span>
+              <span>@blog.VisitsNumber 次阅读</span>
+            </span>
+            <span class="readme">
+              <a target="_blank" asp-controller="Blogs" asp-action="BlogDetail" asp-route-Id="@blog.Id">阅读全文</a>
+            </span>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      }
+      <!--分页 start-->
+      <section id="Paging">
+        @{
+          int currentPage = Convert.ToInt32(ViewData["CurrentPage"]);
+          foreach (int page in pages)
+          {
+            string p = page.ToString();
+            if (currentPage == page)
+            {
+              <a class="active disable" href="#">
+                <span>@p</span>
+              </a>
+            }
+            else
+            {
+              <a asp-controller="Blogs" asp-action="Search" asp-route-page="@p"><span>@p</span></a>
+            }
+          }
+        }
+      </section>
+    <!--分页 end-->
+    }
+  </section>
+</section>

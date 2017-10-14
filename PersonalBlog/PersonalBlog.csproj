@@ -5,19 +5,53 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <None Include="wwwroot\css\index.css" />
+    <None Include="wwwroot\css\new.css" />
+    <None Include="wwwroot\css\style.css" />
+    <None Include="wwwroot\css\ty.css" />
+    <None Include="wwwroot\images\001.jpg" />
+    <None Include="wwwroot\images\1f8aea2172f6eb987c3de3f7ba474eb1.png" />
+    <None Include="wwwroot\images\5794.png" />
+    <None Include="wwwroot\images\5817.png" />
+    <None Include="wwwroot\images\5849.png" />
+    <None Include="wwwroot\images\5891.png" />
+    <None Include="wwwroot\images\6167.png" />
+    <None Include="wwwroot\images\6264.png" />
+    <None Include="wwwroot\images\b2.jpg" />
+    <None Include="wwwroot\images\e5e39b1148811261c78b933805d07232.png" />
+    <None Include="wwwroot\images\h_line.jpg" />
+    <None Include="wwwroot\images\li.jpg" />
+    <None Include="wwwroot\images\logo.png" />
+    <None Include="wwwroot\images\ph.jpg" />
+    <None Include="wwwroot\images\qq_bg.png" />
+    <None Include="wwwroot\images\r_line.jpg" />
+    <None Include="wwwroot\images\r_title_bg.jpg" />
+    <None Include="wwwroot\images\time.jpg" />
+    <None Include="wwwroot\js\html5.js" />
+    <None Include="wwwroot\js\nav.js" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hangfire" Version="1.6.16" />
+    <PackageReference Include="Hangfire.MySql.Core" Version="2.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-beta5" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.0-rtm-10062" />
   </ItemGroup>
-
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.0" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\UploadImages\" />
   </ItemGroup>
 
 </Project>
